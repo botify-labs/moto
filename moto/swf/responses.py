@@ -330,7 +330,11 @@ class SWFResponse(BaseResponse):
         if _task_list:
             task_list = _task_list.get("name")
         else:
-            task_list = None
+            _default_task_list = _workflow_type.get("defaultTaskList")
+            if _default_task_list:
+                task_list = _default_task_list.get("name")
+            else:
+                task_list = None
         child_policy = self._params.get("childPolicy")
         execution_start_to_close_timeout = self._params.get(
             "executionStartToCloseTimeout")
@@ -343,7 +347,7 @@ class SWFResponse(BaseResponse):
         self._check_string(workflow_id)
         self._check_string(workflow_name)
         self._check_string(workflow_version)
-        self._check_none_or_string(task_list)
+        self._check_string(task_list)
         self._check_none_or_string(child_policy)
         self._check_none_or_string(execution_start_to_close_timeout)
         self._check_none_or_string(input_)
